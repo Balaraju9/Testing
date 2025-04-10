@@ -1,0 +1,37 @@
+
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+X, y = load_breast_cancer(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
+# Train classifier
+model = LogisticRegression(max_iter=5000)
+model.fit(X_train, y_train)
+
+# Predictions & Accuracy
+y_pred = model.predict(X_test)
+print("Model Accuracy:", accuracy_score(y_test, y_pred))
+
+------------------------------------------------------------------
+
+import pandas as pd
+from sklearn.preprocessing import OneHotEncoder
+
+# Create dataset
+data = {'Employee ID': [10, 20, 15, 25, 30], 'Gender': ['M', 'F', 'F', 'M', 'F'], 'Remarks': ['Good', 'Nice', 'Good', 'Great', 'Nice']}
+df = pd.DataFrame(data)
+
+# One-hot encoding
+encoder = OneHotEncoder(sparse_output=False)
+encoded = encoder.fit_transform(df[['Gender', 'Remarks']])
+encoded_df = pd.DataFrame(encoded, columns=encoder.get_feature_names_out(['Gender', 'Remarks']))
+
+# Merge with original data
+df_encoded = pd.concat([df, encoded_df], axis=1).drop(columns=['Gender', 'Remarks'])
+
+print("Encoded Dataset:\n", df_encoded)
+
